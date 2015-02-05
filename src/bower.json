@@ -1,0 +1,24 @@
+{
+  "name": "polymer-master",
+  "version": "1.0.0",
+  "homepage": "https://github.com/ashvin777/polymer-app",
+  "authors": [
+    "ashvin777"
+  ],
+  "description": "Polymer master project",
+  "keywords": [
+    "polymer-master"
+  ],
+  "license": "]",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.4",
+    "app-router": "~2.4.0"
+  }
+}
