@@ -2,9 +2,7 @@ var app = require('http').createServer(handler)
 var fs = require('fs');
 var mime = require('mime');
 
-var fswatcher = fs.watch('/', function(event) {
-  console.log(event, new Date() - startDate);
-});
+var fswatcher = fs.watch('../src', function(){});
 
 app.listen(9090);
 

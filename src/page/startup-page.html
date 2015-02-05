@@ -1,8 +1,19 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import"
+      href="../bower_components/polymer/polymer.html">
+<link rel="import"
+      href="../core/core-container.html">
 
-<polymer-element name="startup-page" noscript>
-  <template>
-    <span>I'm <b>my-element</b>. This is my Shadow DOM.</span>
-    <h1>Hello</h1>
+<polymer-element name="startup-page">
+  <template>  
+    <core-container>
+      <p>this is paragraph</p>
+      <h1>inner</h1>
+    </core-container>
   </template>
+  <script>  
+    Polymer({
+      data : "asdasd",
+      owner: "Daniel"
+    });
+  </script>
 </polymer-element>
