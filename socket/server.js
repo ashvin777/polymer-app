@@ -1,13 +1,15 @@
 var app = require('http').createServer(handler)
-var io = require('socket.io')(app);
 var fs = require('fs');
 var mime = require('mime');
+
+var fswatcher = fs.watch('/', function(event) {
+  console.log(event, new Date() - startDate);
+});
 
 app.listen(9090);
 
 function handler (req, res) {
  var filePath = "../src"+req.url;
- // console.log(req.url);
  if(req.url == "/"){
   filePath = "../src/index.html";
  }
@@ -21,10 +23,3 @@ function handler (req, res) {
     res.end(data);
   });
 }
-
-io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
