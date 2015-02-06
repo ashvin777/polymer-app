@@ -42,11 +42,14 @@
   <script>
     Polymer('code-mirror', {
       value: '',
-      mode: 'javascript',
+      mode: 'htmlmixed',
       theme: 'ambiance',
       tabSize: 2,
       lineNumbers: true,
+      isWriting : false,
+      stage : "template",
       ready: function() {
+        var self = this;
         if (!this.value) {
           this.value = this.textContent;
         }
@@ -59,49 +62,95 @@
           foldGutter: true,
           gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
         });
-          
         this.mirror.focus();
-        CodeMirror.commands["goLineEnd"](this.mirror);
+        // CodeMirror.commands["selectAll"](this.mirror);
 
+        var recognition = new webkitSpeechRecognition();
+        var interim_transcript = "";
+        var final_transcript = "";
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.onresult = function(event) { 
+          interim_transcript = "";
+          for (var i = event.resultIndex; i < event.results.length; ++i) {
+              interim_transcript += event.results[i][0].transcript;
+          } 
+          if(interim_transcript != ""){
+            self.gotVoiceCommand(interim_transcript);
+          }
+        }
+        recognition.start();
+      },
+      gotVoiceCommand : function(voiceCommand){
+        var self = this;
+        voiceCommand = voiceCommand.trim();
 
-        //alert(this.mirror.getCursor(true));
+        switch(voiceCommand){
+          case "find mode" : self.stage = "find"; break;
+          case "template mode" :  self.stage ="template"; break;
+          case "command mode" : self.stage = "command" ; break;
+          case "edit mode" : self.stage = "edit" ; break;
+          default : break;
+        }
+        console.clear();
+        console.log(voiceCommand);
+        console.log("Stage : "+self.stage);
+        
+        switch(self.stage){
+          case "find" :  findMode(voiceCommand); break;
+          case "template" :  writeTemplate(voiceCommand); break;
+          case "command" :  runCommand(voiceCommand); break;
+          case "edit" :  writeSimpleText(voiceCommand); break;
+          default : break;
+        }
 
-      }//,
-//       refresh: function() {
-//         this.mirror.refresh();
-//       },
-//       valueChanged: function() {
-//         this.mirror.setValue(this.value);
-//       },
-//       modeChanged: function() {
-//         this.mirror.setOption('mode', this.mode);
-//       },
-//       themeChanged: function() {
-//         this.mirror.setOption('theme', this.theme);
-//       },
-//       tabSizeChanged: function() {
-//         this.mirror.setOption('tabSize', this.tabSize);
-//       },
-//       lineNumbersChanged: function() {
-//         this.mirror.setOption('lineNumbers', this.lineNumbers);
-//       },
-//       focus: function() {
-//         this.mirror.focus();
-//       }
-    });
-  </script>
-</polymer-element>
+        function writeTemplate(key){
+          key = key.trim();
+          if( typeof dictionary[key] != "undefined" ){
+            if(self.isWriting == false){
+              self.mirror.replaceRange(dictionary[key],self.mirror.getCursor());
+              self.isWriting = true;
+              setTimeout(function(){
+                self.isWriting = false;
+              },500);
+            }
+          }
+        }
 
-<polymer-element name="startup-page">
-  <template>  
-  </template>
-  <script>  
-    Polymer({
-      ready : function(){
-        var myCodeMirror = CodeMirror.fromTextArea(this.shadowRoot,{
-          lineNumbers: true,
-           mode: "htmlmixed"
-        });
+        function writeSimpleText(text){
+            if(self.isWriting == false){
+              self.mirror.replaceRange(text,self.mirror.getCursor());
+              self.isWriting = true;
+              setTimeout(function(){
+                self.isWriting = false;
+              },500);
+            }
+        }
+
+        function findMode(voiceCommand){
+          self.stage = "find";
+          var cursor = self.mirror.getSearchCursor(voiceCommand);
+          if(cursor.findNext() || cursor.findPrevious()) { 
+            self.mirror.setSelection(cursor.from(), cursor.to());
+          }
+        }
+
+        function runCommand(command){
+          if(self.isWriting == false){
+            console.log(camelCase(command));
+            CodeMirror.commands[camelCase(command)](self.mirror);
+            self.isWriting = true;
+            setTimeout(function(){
+              self.isWriting = false;
+            },500);
+          }
+        }
+
+        function camelCase(str) { 
+            return str[0].toLowerCase() + str.replace(/-([a-z])/g, function (a, b) {
+                return b.toUpperCase();
+            }).slice(1);
+        }
       }
     });
   </script>
