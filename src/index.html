@@ -3,11 +3,29 @@
   <head>
     <title>App Router</title>
     <script type="text/javascript" src="/bower_components/webcomponentsjs/webcomponents.js"></script>
+    
     <link rel="import" href="/bower_components/app-router/app-router.html">
+    <link rel="import" href="/page/codemirror.html">
+     <style>
+      body {
+        margin: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+      }
+      code-mirror {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
-    <app-router>
-      <app-route path="/" import="/page/startup-page.html"></app-route>
-    </app-router>
+    <code-mirror>function sample(){
+	var x = "sadasdasd";
+  function indiatimes(){
+  }
+}</code-mirror>
   </body>
 </html>

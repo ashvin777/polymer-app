@@ -1,0 +1,101 @@
+<link rel="import"
+      href="../bower_components/polymer/polymer.html">
+<link rel="import" href="codemirror-import.html">
+
+<polymer-element name="code-mirror" attributes="value mode theme tabSize lineNumbers">
+  <template>
+    <link href="../codemirror-4.12/lib/codemirror.css" rel="stylesheet" >
+    <link href="../codemirror-4.12/theme/ambiance.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/ambiance-mobile.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/blackboard.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/cobalt.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/eclipse.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/elegant.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/erlang-dark.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/lesser-dark.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/midnight.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/monokai.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/neat.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/night.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/rubyblue.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/solarized.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/twilight.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/vibrant-ink.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/xq-dark.css" rel="stylesheet">
+    <link href="../codemirror-4.12/theme/xq-light.css" rel="stylesheet">
+    <link href="../codemirror-4.12/addon/fold/foldgutter.css" rel="stylesheet">
+
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+      .CodeMirror {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </template>
+  <script>
+    Polymer('code-mirror', {
+      value: '',
+      mode: 'javascript',
+      theme: 'ambiance',
+      tabSize: 2,
+      lineNumbers: true,
+      ready: function() {
+        if (!this.value) {
+          this.value = this.textContent;
+        }
+        this.mirror = CodeMirror(this.shadowRoot, {
+          value: this.value || this.textContent,
+          mode: this.mode,
+          theme: this.theme,
+          tabSize: this.tabSize,
+          lineNumbers: this.lineNumbers,
+          foldGutter: true,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        });
+      },
+      refresh: function() {
+        this.mirror.refresh();
+      },
+      valueChanged: function() {
+        this.mirror.setValue(this.value);
+      },
+      modeChanged: function() {
+        this.mirror.setOption('mode', this.mode);
+      },
+      themeChanged: function() {
+        this.mirror.setOption('theme', this.theme);
+      },
+      tabSizeChanged: function() {
+        this.mirror.setOption('tabSize', this.tabSize);
+      },
+      lineNumbersChanged: function() {
+        this.mirror.setOption('lineNumbers', this.lineNumbers);
+      },
+      focus: function() {
+        this.mirror.focus();
+      }
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="startup-page">
+  <template>  
+  </template>
+  <script>  
+    Polymer({
+      ready : function(){
+        var myCodeMirror = CodeMirror.fromTextArea(this.shadowRoot,{
+          lineNumbers: true,
+           mode: "htmlmixed"
+        });
+      }
+    });
+  </script>
+</polymer-element>
