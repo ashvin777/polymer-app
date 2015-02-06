@@ -59,28 +59,35 @@
           foldGutter: true,
           gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
         });
-      },
-      refresh: function() {
-        this.mirror.refresh();
-      },
-      valueChanged: function() {
-        this.mirror.setValue(this.value);
-      },
-      modeChanged: function() {
-        this.mirror.setOption('mode', this.mode);
-      },
-      themeChanged: function() {
-        this.mirror.setOption('theme', this.theme);
-      },
-      tabSizeChanged: function() {
-        this.mirror.setOption('tabSize', this.tabSize);
-      },
-      lineNumbersChanged: function() {
-        this.mirror.setOption('lineNumbers', this.lineNumbers);
-      },
-      focus: function() {
+          
         this.mirror.focus();
-      }
+        CodeMirror.commands["goLineEnd"](this.mirror);
+
+
+        //alert(this.mirror.getCursor(true));
+
+      }//,
+//       refresh: function() {
+//         this.mirror.refresh();
+//       },
+//       valueChanged: function() {
+//         this.mirror.setValue(this.value);
+//       },
+//       modeChanged: function() {
+//         this.mirror.setOption('mode', this.mode);
+//       },
+//       themeChanged: function() {
+//         this.mirror.setOption('theme', this.theme);
+//       },
+//       tabSizeChanged: function() {
+//         this.mirror.setOption('tabSize', this.tabSize);
+//       },
+//       lineNumbersChanged: function() {
+//         this.mirror.setOption('lineNumbers', this.lineNumbers);
+//       },
+//       focus: function() {
+//         this.mirror.focus();
+//       }
     });
   </script>
 </polymer-element>
